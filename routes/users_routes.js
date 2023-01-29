@@ -1,4 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-router.post("/signup", async (req, res) => {});
+const { isEmailValid } = require("../middlewares/users_middleware");
+
+router.post("/signup", isEmailValid, async (req, res) => {});
