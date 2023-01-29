@@ -13,8 +13,23 @@ async function getUserByEmailModel(email) {
     if (error) throw error;
     return data;
   } catch (error) {
+    console.error(error);
     return { error: error.message };
   }
 }
 
-module.exports = { getUserByEmailModel };
+async function getUserByUsernameModel(username) {
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("username", username);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error: error.message };
+  }
+}
+
+module.exports = { getUserByEmailModel, getUserByUsernameModel };
