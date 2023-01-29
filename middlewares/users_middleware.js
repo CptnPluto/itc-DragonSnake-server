@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const { getUserByEmailModel, getUserByUsernameModel } = require("../db_models");
 
 async function isEmailValid(req, res, next) {
@@ -23,6 +24,20 @@ async function isUsernameValid(req, res, next) {
     res.status(400).send(error);
   }
 }
+async function hashPassword(req, res, next) {
+  try {
+    const saltRounds = 10;
+    const hashed = await bcrypt.hash(req.body.password, saltRounds);
+
+    if (!hashed) throw new Error("Bcrypt error");
+    req.body.password = hashed;
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+
 function passwordsMatch(req, res, next) {
   if (req.body.password !== req.body.repassword) {
     res.status(400).send("Passwords don't match");
@@ -31,4 +46,9 @@ function passwordsMatch(req, res, next) {
   next();
 }
 
-module.exports = { isEmailValid, isUsernameValid, passwordsMatch };
+module.exports = {
+  isEmailValid,
+  isUsernameValid,
+  passwordsMatch,
+  hashPassword,
+};
