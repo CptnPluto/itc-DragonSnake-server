@@ -87,7 +87,7 @@ async function getUserByIdModel(id) {
   }
 }
 
-async function getScoresById(id) {
+async function getScoresByIdModel(id) {
   try {
     const { data, error } = await supabase
       .from("scores")
@@ -101,6 +101,26 @@ async function getScoresById(id) {
   }
 }
 
+async function getHighScoreModel(id) {
+  try {
+    const { data, error } = await supabase
+      .from("scores")
+      .select("*")
+      .order("score", { ascending: false })
+      .limit(1);
+  } catch (error) {
+    console.error(error);
+    return { error: error.message };
+  }
+}
+async function getLastScoreModel(id) {
+  try {
+  } catch (error) {
+    console.error(error);
+    return { error: error.message };
+  }
+}
+
 module.exports = {
   getUserByEmailModel,
   getUserByUsernameModel,
@@ -108,5 +128,6 @@ module.exports = {
   addScoreToDBModel,
   getAllScoresModel,
   getUserByIdModel,
-  getScoresById,
+  getScoresByIdModel,
+  getHighScoreModel,
 };
