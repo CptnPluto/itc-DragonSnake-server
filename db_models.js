@@ -87,12 +87,43 @@ async function getUserByIdModel(id) {
   }
 }
 
-async function getScoresById(id) {
+async function getScoresByIdModel(id) {
   try {
     const { data, error } = await supabase
       .from("scores")
       .select("*")
       .eq("userId", id);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error: error.message };
+  }
+}
+
+async function getHighScoreModel(id) {
+  try {
+    const { data, error } = await supabase
+      .from("scores")
+      .select("*")
+      .eq("userId", id)
+      .order("score", { ascending: false })
+      .limit(1);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error: error.message };
+  }
+}
+async function getLatestScoreModel(id) {
+  try {
+    const { data, error } = await supabase
+      .from("scores")
+      .select("*")
+      .eq("userId", id)
+      .order("date", { ascending: false })
+      .limit(1);
     if (error) throw error;
     return data;
   } catch (error) {
@@ -108,5 +139,7 @@ module.exports = {
   addScoreToDBModel,
   getAllScoresModel,
   getUserByIdModel,
-  getScoresById,
+  getScoresByIdModel,
+  getHighScoreModel,
+  getLatestScoreModel,
 };
