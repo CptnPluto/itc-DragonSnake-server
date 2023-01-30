@@ -18,7 +18,7 @@ router.post(
   async (req, res) => {
     try {
       await addUserToDBModel(req.body);
-      res.send("sign up");
+      res.send({ ok: true });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
