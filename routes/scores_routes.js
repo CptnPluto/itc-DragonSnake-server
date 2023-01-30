@@ -3,6 +3,7 @@ const {
   addScoreToDBModel,
   getAllScoresModel,
   getScoresByIdModel,
+  getHighScoreModel,
 } = require("../db_models");
 const { verifyToken } = require("../middlewares/users_middleware");
 const router = express.Router();
@@ -33,6 +34,28 @@ router.get("/", verifyToken, async (req, res) => {
 router.get("/:id", verifyToken, async (req, res) => {
   try {
     const response = await getScoresByIdModel(req.params.id);
+    if (response.error) throw response.error;
+    res.send(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+router.get("/high/:id", async (req, res) => {
+  try {
+    const response = await getHighScoreModel(req.params.id);
+    if (response.error) throw response.error;
+    res.send(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+router.get("/latest/:id", async (req, res) => {
+  try {
+    const response = await getHighScoreModel(req.params.id);
     if (response.error) throw response.error;
     res.send(response);
   } catch (error) {

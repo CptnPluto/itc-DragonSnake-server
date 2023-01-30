@@ -106,8 +106,11 @@ async function getHighScoreModel(id) {
     const { data, error } = await supabase
       .from("scores")
       .select("*")
+      .eq("userId", id)
       .order("score", { ascending: false })
       .limit(1);
+    if (error) throw error;
+    return data;
   } catch (error) {
     console.error(error);
     return { error: error.message };
