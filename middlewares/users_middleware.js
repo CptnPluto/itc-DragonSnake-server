@@ -1,4 +1,6 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 const { getUserByEmailModel, getUserByUsernameModel } = require("../db_models");
 
 async function isEmailValid(req, res, next) {
@@ -9,7 +11,7 @@ async function isEmailValid(req, res, next) {
     next();
   } catch (error) {
     console.error(error);
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
 }
 
@@ -21,7 +23,7 @@ async function isUsernameValid(req, res, next) {
     next();
   } catch (error) {
     console.error(error);
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
 }
 async function hashPassword(req, res, next) {
@@ -34,13 +36,42 @@ async function hashPassword(req, res, next) {
     next();
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
+  }
+}
+
+async function doesUserExist(req, res, next) {
+  try {
+    const user = await getUserByEmailModel(req.body.email);
+    if (!user.length) throw new Error("Email not found");
+    req.body.user = user[0];
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(400).send({ error: error.message });
+  }
+}
+
+async function checkPassword(req, res, next) {
+  try {
+    const matched = await bcrypt.compare(
+      req.body.password,
+      req.body.user.password
+    );
+    if (!matched) throw new Error("Wrong Password");
+    req.body.token = jwt.sign({ id: req.body.user.id }, process.env.TOKEN_KEY, {
+      expiresIn: "2hrs",
+    });
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(400).send({ error: error.message });
   }
 }
 
 function passwordsMatch(req, res, next) {
   if (req.body.password !== req.body.repassword) {
-    res.status(400).send("Passwords don't match");
+    res.status(400).send({ error: "Passwords don't match" });
     return;
   }
   next();
@@ -51,4 +82,6 @@ module.exports = {
   isUsernameValid,
   passwordsMatch,
   hashPassword,
+  doesUserExist,
+  checkPassword,
 };
