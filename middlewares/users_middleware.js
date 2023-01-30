@@ -38,6 +38,16 @@ async function hashPassword(req, res, next) {
   }
 }
 
+async function doesUserExist(req, res, next) {
+  try {
+    const user = await getUserByEmailModel(req.body.email);
+    if (!user.length) throw new Error("Email not found");
+    next();
+  } catch (error) {
+    res.status(400).send(error);
+  }
+}
+
 function passwordsMatch(req, res, next) {
   if (req.body.password !== req.body.repassword) {
     res.status(400).send("Passwords don't match");
@@ -51,4 +61,5 @@ module.exports = {
   isUsernameValid,
   passwordsMatch,
   hashPassword,
+  doesUserExist,
 };
