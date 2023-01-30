@@ -87,6 +87,20 @@ async function getUserByIdModel(id) {
   }
 }
 
+async function getScoresById(id) {
+  try {
+    const { data, error } = await supabase
+      .from("scores")
+      .select("*")
+      .eq("userId", id);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error: error.message };
+  }
+}
+
 module.exports = {
   getUserByEmailModel,
   getUserByUsernameModel,
@@ -94,4 +108,5 @@ module.exports = {
   addScoreToDBModel,
   getAllScoresModel,
   getUserByIdModel,
+  getScoresById,
 };
