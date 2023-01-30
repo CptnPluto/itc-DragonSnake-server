@@ -1,4 +1,6 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 const { getUserByEmailModel, getUserByUsernameModel } = require("../db_models");
 
 async function isEmailValid(req, res, next) {
@@ -42,7 +44,7 @@ async function doesUserExist(req, res, next) {
   try {
     const user = await getUserByEmailModel(req.body.email);
     if (!user.length) throw new Error("Email not found");
-    req.user = user;
+    req.body.user = user[0];
     next();
   } catch (error) {
     console.error(error);
@@ -54,6 +56,9 @@ async function checkPassword(req, res, next) {
   try {
     const matched = await bcrypt.compare(req.body.password, req.user.password);
     if (!matched) throw new Error("Wrong Password");
+    req.body.token = jwt.sign({ id: req.body.user.id }, process.env.TOKEN_KEY, {
+      expiresIn: "2hrs",
+    });
     next();
   } catch (error) {
     console.error(error);
