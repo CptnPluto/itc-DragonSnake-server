@@ -42,8 +42,21 @@ async function doesUserExist(req, res, next) {
   try {
     const user = await getUserByEmailModel(req.body.email);
     if (!user.length) throw new Error("Email not found");
+    req.user = user;
     next();
   } catch (error) {
+    console.error(error);
+    res.status(400).send(error);
+  }
+}
+
+async function checkPassword(req, res, next) {
+  try {
+    const matched = await bcrypt.compare(req.body.password, req.user.password);
+    if (!matched) throw new Error("Wrong Password");
+    next();
+  } catch (error) {
+    console.error(error);
     res.status(400).send(error);
   }
 }
@@ -62,4 +75,5 @@ module.exports = {
   passwordsMatch,
   hashPassword,
   doesUserExist,
+  passwordsMatch,
 };
