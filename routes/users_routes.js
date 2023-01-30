@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { addUserToDBModel } = require("../db_models");
+const { addUserToDBModel, getUserByIdModel } = require("../db_models");
 
 const {
   isEmailValid,
@@ -45,6 +45,15 @@ router.post("/login", doesUserExist, checkPassword, async (req, res) => {
   }
 });
 
-router.get("/", verifyToken);
+router.get("/", verifyToken, async (req, res) => {
+  try {
+    const response = await getUserByIdModel(req.body.id);
+    if (response.error) throw response.error;
+    res.send(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message });
+  }
+});
 
 module.exports = router;

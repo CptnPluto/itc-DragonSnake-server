@@ -80,7 +80,7 @@ async function getUserByIdModel(id) {
       .select("*")
       .eq("id", id);
     if (error) throw error;
-    return data;
+    return { username: data[0].username, id };
   } catch (error) {
     console.error(error);
     return { error: error.message };
