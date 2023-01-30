@@ -35,7 +35,7 @@ router.post("/login", doesUserExist, checkPassword, async (req, res) => {
     res.cookie("token", token, {
       maxAge: 9000000,
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "lax",
       secure: false,
     });
     res.send({ id: user.id, username: user.username });
