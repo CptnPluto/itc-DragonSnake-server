@@ -9,6 +9,7 @@ const {
   hashPassword,
   doesUserExist,
   checkPassword,
+  verifyToken,
 } = require("../middlewares/users_middleware");
 
 router.post(
@@ -43,5 +44,7 @@ router.post("/login", doesUserExist, checkPassword, async (req, res) => {
     res.status(500).send({ error: error.message });
   }
 });
+
+router.get("/", verifyToken);
 
 module.exports = router;
