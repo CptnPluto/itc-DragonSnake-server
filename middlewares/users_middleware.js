@@ -75,5 +75,5 @@ module.exports = {
   passwordsMatch,
   hashPassword,
   doesUserExist,
-  passwordsMatch,
+  checkPassword,
 };
