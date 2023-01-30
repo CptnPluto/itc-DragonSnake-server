@@ -66,4 +66,5 @@ module.exports = {
   getUserByEmailModel,
   getUserByUsernameModel,
   addUserToDBModel,
+  addScoreToDBModel,
 };
