@@ -116,8 +116,16 @@ async function getHighScoreModel(id) {
     return { error: error.message };
   }
 }
-async function getLastScoreModel(id) {
+async function getLatestScoreModel(id) {
   try {
+    const { data, error } = await supabase
+      .from("scores")
+      .select("*")
+      .eq("userId", id)
+      .order("date", { ascending: false })
+      .limit(1);
+    if (error) throw error;
+    return data;
   } catch (error) {
     console.error(error);
     return { error: error.message };
@@ -133,4 +141,5 @@ module.exports = {
   getUserByIdModel,
   getScoresByIdModel,
   getHighScoreModel,
+  getLatestScoreModel,
 };
