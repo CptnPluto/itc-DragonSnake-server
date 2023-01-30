@@ -69,6 +69,25 @@ async function checkPassword(req, res, next) {
   }
 }
 
+async function verifyToken(req, res, next) {
+  try {
+    const { token } = req.cookies;
+    if (!token) throw new Error("Missing Token");
+
+    jwt.verify(token, process.env.TOKEN_KEY, (err, decoded) => {
+      if (err) {
+        res.status(401).send({ error: err.message });
+        return;
+      }
+      req.body.id = decoded.id;
+      next();
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(401).send({ error: error.message });
+  }
+}
+
 function passwordsMatch(req, res, next) {
   if (req.body.password !== req.body.repassword) {
     res.status(400).send({ error: "Passwords don't match" });
@@ -84,4 +103,5 @@ module.exports = {
   hashPassword,
   doesUserExist,
   checkPassword,
+  verifyToken,
 };
