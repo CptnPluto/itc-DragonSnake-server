@@ -1,5 +1,6 @@
 const express = require("express");
-const { addScoreToDBModel } = require("../db_models");
+const { addScoreToDBModel, getAllScoresModel } = require("../db_models");
+const { verifyToken } = require("../middlewares/users_middleware");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -8,6 +9,17 @@ router.post("/", async (req, res) => {
     console.log(response);
     if (response?.error) throw response.error;
     res.send({ ok: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+router.get("/", verifyToken, async (req, res) => {
+  try {
+    const response = await getAllScoresModel();
+    if (response.error) throw response.error;
+    res.send(response);
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: error.message });

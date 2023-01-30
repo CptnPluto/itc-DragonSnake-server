@@ -62,9 +62,21 @@ async function addScoreToDBModel(scoreObj) {
   }
 }
 
+async function getAllScoresModel() {
+  try {
+    const { data, error } = await supabase.from("scores").select("*");
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error: error.message };
+  }
+}
+
 module.exports = {
   getUserByEmailModel,
   getUserByUsernameModel,
   addUserToDBModel,
   addScoreToDBModel,
+  getAllScoresModel,
 };
