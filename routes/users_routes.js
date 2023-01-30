@@ -1,6 +1,6 @@
 const express = require("express");
-const { addUserToDBModel } = require("../db_models");
 const router = express.Router();
+const { addUserToDBModel } = require("../db_models");
 
 const {
   isEmailValid,
