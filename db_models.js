@@ -1,4 +1,4 @@
-const { createClient } = require("@supabase/supabase-js");
+const { createClient, RealtimePresence } = require("@supabase/supabase-js");
 const { v4: uuidv4 } = require("uuid");
 const supabaseUrl = "https://qhimjiomvjwnjailkxdy.supabase.co";
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -51,8 +51,20 @@ async function addUserToDBModel(user) {
   }
 }
 
+async function addScoreToDBModel(scoreObj) {
+  try {
+    const { data, error } = await supabase.from("scores").insert(scoreObj);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error: error.message };
+  }
+}
+
 module.exports = {
   getUserByEmailModel,
   getUserByUsernameModel,
   addUserToDBModel,
+  addScoreToDBModel,
 };

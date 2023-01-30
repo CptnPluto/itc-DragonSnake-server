@@ -1,6 +1,6 @@
 const express = require("express");
-const { addUserToDBModel } = require("../db_models");
 const router = express.Router();
+const { addUserToDBModel } = require("../db_models");
 
 const {
   isEmailValid,
@@ -23,7 +23,7 @@ router.post(
       res.send({ ok: true });
     } catch (error) {
       console.error(error);
-      res.status(500).send(error);
+      res.status(500).send({ error: error.message });
     }
   }
 );
@@ -40,7 +40,7 @@ router.post("/login", doesUserExist, checkPassword, async (req, res) => {
     res.send({ id: user.id, username: user.username });
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
