@@ -33,9 +33,12 @@ app.use(morgan("tiny"));
 app.use("/users", UsersRoute);
 app.use("/scores", ScoresRoute);
 
-
 io.on("connection", (client) => {
   console.log("a user connected to socket. client id: ", client.id);
+
+  client.on("disconnect", () => {
+    console.log("user disconnected");
+  });
 });
 
 server.listen(PORT, () => {
