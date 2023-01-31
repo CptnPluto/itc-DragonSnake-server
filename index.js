@@ -33,28 +33,9 @@ app.use(morgan("tiny"));
 app.use("/users", UsersRoute);
 app.use("/scores", ScoresRoute);
 
-const players = [];
+
 io.on("connection", (client) => {
-  console.log("connected to socket");
-
-  client.on("join", (socketId) => {
-    // socket.join(socketId);
-    console.log(socketId);
-
-    client.emit("tick", socketId);
-  });
-
-  client.on("click", (data) => {
-    console.log(data);
-    client.emit("clicked", "second");
-  });
-
-  client.on("ready", (snake) => {
-    client.to(socketId).emit("tick", "data");
-    //check game ending condition
-    // check if food
-    //generate cells
-  });
+  console.log("a user connected to socket. client id: ", client.id);
 });
 
 server.listen(PORT, () => {
