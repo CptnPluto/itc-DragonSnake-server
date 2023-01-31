@@ -1,0 +1,5 @@
+user connects
+user creates or joins room
+    Game start event
+        start interval
+            
