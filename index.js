@@ -34,10 +34,19 @@ app.use("/users", UsersRoute);
 app.use("/scores", ScoresRoute);
 
 io.on("connection", (client) => {
-  console.log("a user connected to socket. client id: ", client.id);
+  client.on("create room", () => {
+    let roomId = Math.random().toString(36).substring(2, 7);
+    client.join(roomId);
+    client.emit("roomId", roomId);
+  });
 
-  client.on("disconnect", () => {
-    console.log("user disconnected");
+  client.on("join room", (roomId) => {
+    client.join(roomId);
+    io.in(roomId).emit("user joined", client.id);
+  });
+
+  client.on("start game", (roomId) => {
+    io.to(roomId).emit("game started");
   });
 });
 
