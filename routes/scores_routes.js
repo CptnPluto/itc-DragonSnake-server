@@ -9,6 +9,8 @@ const {
 const { verifyToken } = require("../middlewares/users_middleware");
 const router = express.Router();
 
+
+//Add score
 router.post("/", async (req, res) => {
   try {
     const response = await addScoreToDBModel(req.body);
@@ -21,7 +23,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", verifyToken, async (req, res) => {
+
+//Get all scores
+router.get("/", async (req, res) => {
   try {
     const response = await getAllScoresModel();
     if (response.error) throw response.error;
@@ -32,6 +36,8 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
+
+//Get scores by user id
 router.get("/:id", verifyToken, async (req, res) => {
   try {
     const response = await getScoresByIdModel(req.params.id);
@@ -43,6 +49,8 @@ router.get("/:id", verifyToken, async (req, res) => {
   }
 });
 
+
+//Get high score by user id
 router.get("/high/:id", verifyToken, async (req, res) => {
   try {
     const response = await getHighScoreModel(req.params.id);
@@ -54,6 +62,8 @@ router.get("/high/:id", verifyToken, async (req, res) => {
   }
 });
 
+
+//Get latest score by user id
 router.get("/latest/:id", verifyToken, async (req, res) => {
   try {
     const response = await getLatestScoreModel(req.params.id);

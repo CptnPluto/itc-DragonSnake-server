@@ -38,6 +38,7 @@ router.post("/login", doesUserExist, checkPassword, async (req, res) => {
             sameSite: "lax",
             secure: false,
         });
+        console.log(user.id);
         res.send({ id: user.id, username: user.username });
     } catch (error) {
         console.error(error);
