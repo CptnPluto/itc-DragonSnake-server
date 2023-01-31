@@ -1,0 +1,19 @@
+1. Create the board
+2. Create the snake
+3. Create user input functionality
+
+
+4. Set initial position and direction
+5. Add event listener to update direction
+
+5. Game tick function
+    1. Move snake position based on direction
+    2. Check head location
+        a. if head === food
+                grow snake
+                get new food
+            else if head === dieCondition
+                show end game screen
+                break
+           
+            next tick
