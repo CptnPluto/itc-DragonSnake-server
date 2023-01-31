@@ -34,23 +34,23 @@ app.use("/users", UsersRoute);
 app.use("/scores", ScoresRoute);
 
 const players = [];
-io.on("connection", (socket) => {
+io.on("connection", (client) => {
   console.log("connected to socket");
 
-  socket.on("join", (socketId) => {
+  client.on("join", (socketId) => {
     // socket.join(socketId);
     console.log(socketId);
 
-    socket.emit("tick", socketId);
+    client.emit("tick", socketId);
   });
 
-  socket.on("click", (data) => {
+  client.on("click", (data) => {
     console.log(data);
-    socket.emit("clicked", "second");
+    client.emit("clicked", "second");
   });
 
-  socket.on("ready", (snake) => {
-    socket.to(socketId).emit("tick", "data");
+  client.on("ready", (snake) => {
+    client.to(socketId).emit("tick", "data");
     //check game ending condition
     // check if food
     //generate cells
