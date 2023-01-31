@@ -2,4 +2,7 @@ user connects
 user creates or joins room
     Game start event
         start interval
-            
+            get snake data from users
+            check for game ending conditions
+            check for eat
+            send back new cells
