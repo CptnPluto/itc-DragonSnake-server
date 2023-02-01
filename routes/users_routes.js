@@ -36,7 +36,7 @@ router.post("/login", doesUserExist, checkPassword, async (req, res) => {
       maxAge: 9000000,
       httpOnly: false,
       sameSite: "lax",
-      secure: false,
+      secure: process.env.NODE_ENV === "dev" ? false : true,
     });
     res.send({ id: user.id, username: user.username });
   } catch (error) {
