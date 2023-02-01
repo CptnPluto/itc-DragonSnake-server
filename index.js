@@ -48,6 +48,10 @@ io.on("connection", (client) => {
   client.on("start game", (roomId) => {
     io.to(roomId).emit("game started");
   });
+
+  client.on("send key", (data) => {
+    client.broadcast.emit("received key", data);
+  });
 });
 
 server.listen(PORT, () => {
