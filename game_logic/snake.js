@@ -18,13 +18,13 @@ function move(snake, direction) {
     default:
       throw new Error("Invalid direction");
   }
-  console.log("newSnake before push: ", newSnake);
+
   // newSnake.push(newHead);
   const newSnakeWithNewHead = [...newSnake, newHead];
-  console.log("newSnake before shift: ", newSnakeWithNewHead);
+
   // newSnakeWithNewHead.shift();
   const snakeWithoutTail = newSnakeWithNewHead.slice(1);
-  console.log("newSnake after shift: ", snakeWithoutTail);
+
   return snakeWithoutTail;
 }
 

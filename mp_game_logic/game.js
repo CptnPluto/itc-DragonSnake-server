@@ -1,4 +1,4 @@
-const { INITIAL_SPEED } = require("../game_logic/config");
+const { INITIAL_SPEED, INITIAL_EMPTY_BOARD } = require("../game_logic/config");
 const { insertFood, insertSnake } = require("../game_logic/board");
 const { getRandomFood, isFood } = require("../game_logic/food");
 const {
@@ -23,24 +23,25 @@ const run = (game, io, roomId) => {
     score2,
     winner,
   } = game;
-  insertFood(cells, food);
   const interval = setInterval(() => {
+    let freshCells = JSON.parse(JSON.stringify(INITIAL_EMPTY_BOARD.cells));
+    insertFood(freshCells, food);
     if (isFood(snake1, food)) {
       snake1 = eat(snake1);
       score1++;
       const food = getRandomFood(initialBoard, snake1);
-      insertFood(cells, food);
+      insertFood(freshCells, food);
     }
     if (isFood(snake2, food)) {
       snake2 = eat(snake2);
       score2++;
       const food = getRandomFood(initialBoard, snake2);
-      insertFood(cells, food);
+      insertFood(freshCells, food);
     }
     snake1 = move(snake1, direction1);
     snake2 = move(snake2, direction2);
-    cells = insertSnake(cells, snake1);
-    cells = insertSnake(cells, snake2);
+    freshCells = insertSnake(freshCells, snake1);
+    freshCells = insertSnake(freshCells, snake2);
     if (
       checkWallCollision(snake1, initialBoard) ||
       checkSelfCollision(snake1)
@@ -57,7 +58,7 @@ const run = (game, io, roomId) => {
       clearInterval(interval);
       return;
     }
-    io.to(roomId).emit("cells", cells);
+    io.to(roomId).emit("cells", freshCells);
   }, INITIAL_SPEED);
 };
 
