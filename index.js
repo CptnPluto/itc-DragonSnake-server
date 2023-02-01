@@ -38,11 +38,13 @@ const run = require("./mp_game_logic/game");
 io.on("connection", (client) => {
   client.on("create room", () => {
     let roomId = Math.random().toString(36).substring(2, 7);
+    client.playerNum = 1;
     client.join(roomId);
     client.emit("roomId", roomId);
   });
 
   client.on("join room", (roomId) => {
+    client.playerNum = 2;
     client.join(roomId);
     io.in(roomId).emit("user joined", client.id);
     client.emit("roomId", roomId);
@@ -50,7 +52,7 @@ io.on("connection", (client) => {
 
   client.on("start game", (roomId) => {
     io.to(roomId).emit("game started", game.cells);
-    run(game, io, roomId);
+    run(game, io, roomId, client);
   });
 
   client.on("send key", (data) => {

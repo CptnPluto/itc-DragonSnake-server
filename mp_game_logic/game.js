@@ -8,9 +8,7 @@ const {
   move,
 } = require("../game_logic/snake");
 
-// on ("key", player1), direction1 = key
-// on ("key", player2), direction2 = key
-const run = (game, io, roomId) => {
+const run = (game, io, roomId, client) => {
   let {
     initialBoard,
     snake1,
@@ -23,6 +21,15 @@ const run = (game, io, roomId) => {
     score2,
     winner,
   } = game;
+
+  client.on("direction", (direction) => {
+    if (client.playerNum === 1) {
+      direction1 = direction;
+    } else {
+      direction2 = direction;
+    }
+  });
+
   const interval = setInterval(() => {
     let freshCells = JSON.parse(JSON.stringify(INITIAL_EMPTY_BOARD.cells));
     insertFood(freshCells, food);
