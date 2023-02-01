@@ -10,6 +10,7 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const { Socket } = require("dgram");
 const io = new Server(server, {
     cors: {
         origin: "http://localhost:3000",
@@ -52,7 +53,9 @@ io.on("connection", (client) => {
     });
 
     client.on("send key", (data) => {
-        client.broadcast.emit("received key", data);
+        // client.broadcast.emit("received key", data);
+        console.log("data : ", data);
+        io.in(data.roomId).emit("received key", data.key);
     });
 });
 
