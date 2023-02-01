@@ -40,14 +40,14 @@ io.on("connection", (client) => {
     let roomId = Math.random().toString(36).substring(2, 7);
     client.playerNum = 1;
     client.join(roomId);
-    client.emit("roomId", roomId);
+    client.emit("roomId", { roomId, playerNum: 1 });
   });
 
   client.on("join room", (roomId) => {
     client.playerNum = 2;
     client.join(roomId);
     io.in(roomId).emit("user joined", client.id);
-    client.emit("roomId", roomId);
+    client.emit("roomId", { roomId, playerNum: 2 });
   });
 
   client.on("start game", (roomId) => {

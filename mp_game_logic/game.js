@@ -22,14 +22,32 @@ const run = (game, io, roomId, client) => {
     winner,
   } = game;
 
-  client.on("direction", (direction) => {
-    console.log("playerNum (server/game.js): ", client.playerNum);
-    if (client.playerNum === 1) {
-      direction1 = direction;
-    } else {
-      direction2 = direction;
-    }
+  const clients = [];
+  const roomMap = io.sockets.adapter.rooms.get(roomId);
+  roomMap.forEach((id) => {
+    clients.push(io.sockets.sockets.get(id));
   });
+
+  clients[0].on(
+    "direction",
+    ({ directionEntered, playerNum, playerRoomId }) => {
+      if (playerRoomId !== roomId)
+        return console.log("roomId:", roomId, "playerRoomId:", playerRoomId);
+      console.log("playerNum (server/game.js): ", playerNum);
+
+      direction1 = directionEntered;
+    }
+  );
+
+  clients[1].on(
+    "direction",
+    ({ directionEntered, playerNum, playerRoomId }) => {
+      if (playerRoomId !== roomId)
+        return console.log("roomId:", roomId, "playerRoomId:", playerRoomId);
+      console.log("playerNum (server/game.js): ", playerNum);
+      direction2 = directionEntered;
+    }
+  );
 
   const interval = setInterval(() => {
     let freshCells = JSON.parse(JSON.stringify(INITIAL_EMPTY_BOARD.cells));
