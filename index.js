@@ -10,7 +10,6 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const { Socket } = require("dgram");
 const io = new Server(server, {
   cors: {
     origin: ["https://dragonsnake-client.vercel.app", "http://localhost:3000"],
