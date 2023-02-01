@@ -14,8 +14,8 @@ const { Socket } = require("dgram");
 const io = new Server(server, {
     cors: {
         origin: [
-            "http://localhost:3000",
             "https://dragonsnake-client.vercel.app",
+            "http://localhost:3000",
         ],
         methods: ["GET", "POST"],
         credentials: true,
