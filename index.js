@@ -12,27 +12,20 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const { Socket } = require("dgram");
 const io = new Server(server, {
-
-    cors: {
-        origin: [
-            "https://dragonsnake-client.vercel.app",
-            "http://localhost:3000",
-        ],
-        methods: ["GET", "POST"],
-        credentials: true,
-    },
+  cors: {
+    origin: ["https://dragonsnake-client.vercel.app", "http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
 });
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(
-    cors({
-        origin: [
-            "http://localhost:3000",
-            "https://dragonsnake-client.vercel.app",
-        ],
-        credentials: true,
-    })
+  cors({
+    origin: ["http://localhost:3000", "https://dragonsnake-client.vercel.app"],
+    credentials: true,
+  })
 );
 
 // Access to XMLHttpRequest at 'http://localhost:8080/socket.io/?EIO=4&transport=polling&t=OO7je4q' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
@@ -59,8 +52,8 @@ io.on("connection", (client) => {
   });
 
   client.on("start game", (roomId) => {
-      io.to(roomId).emit("game started", game.cells);
-      run(game, io, roomId);
+    io.to(roomId).emit("game started", game.cells);
+    run(game, io, roomId);
   });
 
   client.on("send key", (data) => {
