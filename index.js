@@ -12,6 +12,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const { Socket } = require("dgram");
 const io = new Server(server, {
+
     cors: {
         origin: [
             "https://dragonsnake-client.vercel.app",
@@ -41,31 +42,36 @@ app.use(morgan("tiny"));
 app.use("/users", UsersRoute);
 app.use("/scores", ScoresRoute);
 
+const { cells } = require("./mp_game_logic/game_setup");
+
 io.on("connection", (client) => {
-    client.on("create room", () => {
-        let roomId = Math.random().toString(36).substring(2, 7);
-        client.join(roomId);
-        console.log("Rooms : ", client.rooms);
-        client.emit("roomId", roomId);
-    });
+  client.on("create room", () => {
+    let roomId = Math.random().toString(36).substring(2, 7);
+    client.join(roomId);
+    client.emit("roomId", roomId);
+  });
 
-    client.on("join room", (roomId) => {
-        client.join(roomId);
-        io.in(roomId).emit("user joined", client.id);
-        client.emit("roomId", roomId);
-    });
+  client.on("join room", (roomId) => {
+    client.join(roomId);
+    io.in(roomId).emit("user joined", client.id);
+    client.emit("roomId", roomId);
+  });
 
-    client.on("start game", (roomId) => {
-        io.to(roomId).emit("game started");
-    });
+  client.on("start game", (roomId) => {
+    io.to(roomId).emit("game started", cells);
+  });
 
-    client.on("send key", (data) => {
-        // client.broadcast.emit("received key", data);
-        console.log("data : ", data);
-        io.in(data.roomId).emit("received key", data.key);
-    });
+  client.on("send key", (data) => {
+    console.log("data : ", data);
+    io.in(data.roomId).emit("received key", data.key);
+  });
+
+  //   client.on("direction", (direction) => {
+  //     console.log("direction : ", direction);
+  //     io.in(data.roomId).emit("received key", direction);
+  //   });
 });
 
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
