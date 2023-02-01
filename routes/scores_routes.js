@@ -14,7 +14,6 @@ const router = express.Router();
 router.post("/", verifyToken, async (req, res) => {
   try {
     const response = await addScoreToDBModel(req.body);
-    console.log(response);
     if (response?.error) throw response.error;
     res.send({ ok: true });
   } catch (error) {

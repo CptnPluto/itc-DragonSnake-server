@@ -56,14 +56,8 @@ io.on("connection", (client) => {
   });
 
   client.on("send key", (data) => {
-    console.log("data : ", data);
     io.in(data.roomId).emit("received key", data.key);
   });
-
-  //   client.on("direction", (direction) => {
-  //     console.log("direction : ", direction);
-  //     io.in(data.roomId).emit("received key", direction);
-  //   });
 });
 
 server.listen(PORT, () => {

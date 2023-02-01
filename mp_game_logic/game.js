@@ -23,6 +23,7 @@ const run = (game, io, roomId, client) => {
   } = game;
 
   client.on("direction", (direction) => {
+    console.log("playerNum (server/game.js): ", client.playerNum);
     if (client.playerNum === 1) {
       direction1 = direction;
     } else {
