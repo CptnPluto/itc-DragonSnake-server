@@ -42,7 +42,8 @@ app.use(morgan("tiny"));
 app.use("/users", UsersRoute);
 app.use("/scores", ScoresRoute);
 
-const { cells } = require("./mp_game_logic/game_setup");
+const game = require("./mp_game_logic/game_setup");
+const run = require("./mp_game_logic/game");
 
 io.on("connection", (client) => {
   client.on("create room", () => {
@@ -58,7 +59,8 @@ io.on("connection", (client) => {
   });
 
   client.on("start game", (roomId) => {
-    io.to(roomId).emit("game started", cells);
+      io.to(roomId).emit("game started", game.cells);
+      run(game, io, roomId);
   });
 
   client.on("send key", (data) => {
