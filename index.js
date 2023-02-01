@@ -27,8 +27,6 @@ app.use(
   })
 );
 
-// Access to XMLHttpRequest at 'http://localhost:8080/socket.io/?EIO=4&transport=polling&t=OO7je4q' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
-
 app.use(cookieParser());
 app.use(morgan("tiny"));
 app.use("/users", UsersRoute);
