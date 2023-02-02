@@ -59,7 +59,7 @@ const run = (game, io, roomId, client) => {
       insertFood(freshCells, food);
     }
     if (isFood(snake2, food)) {
-      snake2 = eat(snake2);
+  snake2 = eat(snake2);
       score2++;
       const food = getRandomFood(initialBoard, snake2);
       insertFood(freshCells, food);
@@ -73,6 +73,7 @@ const run = (game, io, roomId, client) => {
       checkSelfCollision(snake1)
     ) {
       winner = 2;
+      io.to(roomId).emit("win", winner);
       clearInterval(interval);
       return;
     }
@@ -81,6 +82,7 @@ const run = (game, io, roomId, client) => {
       checkSelfCollision(snake2)
     ) {
       winner = 1;
+      io.to(roomId).emit("win", winner);
       clearInterval(interval);
       return;
     }

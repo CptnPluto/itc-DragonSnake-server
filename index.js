@@ -50,6 +50,10 @@ io.on("connection", (client) => {
     client.emit("roomId", { roomId, playerNum: 2 });
   });
 
+  client.on("ready", (roomId) => {
+    io.to(roomId).emit("enter game");
+  });
+
   client.on("start game", (roomId) => {
     io.to(roomId).emit("game started", game.cells);
     run(game, io, roomId, client);
