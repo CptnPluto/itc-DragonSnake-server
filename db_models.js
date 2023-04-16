@@ -1,4 +1,4 @@
-const { createClient, RealtimePresence } = require("@supabase/supabase-js");
+const { createClient } = require("@supabase/supabase-js");
 const { v4: uuidv4 } = require("uuid");
 const supabaseUrl = "https://qhimjiomvjwnjailkxdy.supabase.co";
 const supabaseKey = process.env.SUPABASE_KEY;
