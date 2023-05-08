@@ -1,4 +1,4 @@
-# itc-groupProject-server
+# itc-DragonSnake-server
 ITC Group Project BE
 
 GIT WORKFLOW
